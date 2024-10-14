@@ -1,17 +1,14 @@
 package com.example.demo.Model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import java.util.List;
 
 @Entity
 public class User {
-
-    @Id // Indicates this is the primary key
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Automatically generate unique IDs
-    private int id; // Identifier field
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
 
     private String name;
 
@@ -19,15 +16,20 @@ public class User {
     private String email;
 
     @Column(unique = true)
-    private String phoneNo; // Changed to String for phone number
+    private String phoneNo;
 
     private String password;
 
-    // No-argument constructor for JPA
-    public User() {
-    }
+    // One user can have multiple carts
+    @JsonManagedReference // This indicates the parent side
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Cart> carts;
 
-    // Parameterized constructor
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Address> addresses;
+
+    public User() {}
+
     public User(int id, String name, String email, String phoneNo, String password) {
         this.id = id;
         this.name = name;
@@ -77,6 +79,22 @@ public class User {
         this.password = password;
     }
 
+    public List<Cart> getCarts() {
+        return carts;
+    }
+
+    public void setCarts(List<Cart> carts) {
+        this.carts = carts;
+    }
+
+    public List<Address> getAddresses() {
+        return addresses;
+    }
+
+    public void setAddresses(List<Address> addresses) {
+        this.addresses = addresses;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -85,6 +103,7 @@ public class User {
                 ", email='" + email + '\'' +
                 ", phoneNo='" + phoneNo + '\'' +
                 ", password='" + password + '\'' +
+                ", addresses=" + addresses +
                 '}';
     }
 }

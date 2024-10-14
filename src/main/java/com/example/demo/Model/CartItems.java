@@ -1,5 +1,7 @@
 package com.example.demo.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -9,28 +11,29 @@ public class CartItems {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private String productName;
-    private int quantity;
-    private double price;
-
-    // Many cart items belong to one cart
+    // Each cart item belongs to one cart
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "cart_id", nullable = false)
     private Cart cart;
 
-    // Constructors, Getters and Setters
+    // Product details
+    @ManyToOne
+    @JoinColumn(name = "product_id", nullable = false)
+    private Product product; // Assuming you have a Product entity
+
+    private int quantity; // Number of items of this product
+
     public CartItems() {}
 
-    public CartItems(int id, String productName, int quantity, double price, Cart cart) {
+    public CartItems(int id, Cart cart, Product product, int quantity) {
         this.id = id;
-        this.productName = productName;
-        this.quantity = quantity;
-        this.price = price;
         this.cart = cart;
+        this.product = product;
+        this.quantity = quantity;
     }
 
-    // Getters and setters
-
+    // Getters and Setters
     public int getId() {
         return id;
     }
@@ -39,12 +42,20 @@ public class CartItems {
         this.id = id;
     }
 
-    public String getProductName() {
-        return productName;
+    public Cart getCart() {
+        return cart;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
+    public void setCart(Cart cart) {
+        this.cart = cart;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
     public int getQuantity() {
@@ -53,21 +64,5 @@ public class CartItems {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public Cart getCart() {
-        return cart;
-    }
-
-    public void setCart(Cart cart) {
-        this.cart = cart;
     }
 }

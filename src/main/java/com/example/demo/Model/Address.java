@@ -1,7 +1,11 @@
 package com.example.demo.Model;
 
-import jakarta.persistence.*;
-import java.util.List;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Address {
@@ -13,23 +17,25 @@ public class Address {
     private String street;
     private String city;
     private String state;
+    private String pinCode;
 
-    // One address can be associated with multiple carts
-    @OneToMany(mappedBy = "address")
-    private List<Cart> carts;
+    // Reference to User
+    @ManyToOne
+    @JoinColumn(name = "user_id")  // This will create a foreign key in the Address table
+    private User user;
 
-    // Constructors, Getters and Setters
     public Address() {}
 
-    public Address(int id, String street, String city, String state) {
+    public Address(int id, String street, String city, String state, String pinCode, User user) {
         this.id = id;
         this.street = street;
         this.city = city;
         this.state = state;
+        this.pinCode = pinCode;
+        this.user = user;  // Set user in the constructor
     }
 
-    // Getters and setters
-
+    // Getters and Setters
     public int getId() {
         return id;
     }
@@ -62,11 +68,31 @@ public class Address {
         this.state = state;
     }
 
-    public List<Cart> getCarts() {
-        return carts;
+    public String getPinCode() {
+        return pinCode;
     }
 
-    public void setCarts(List<Cart> carts) {
-        this.carts = carts;
+    public void setPinCode(String pinCode) {
+        this.pinCode = pinCode;
+    }
+
+    public User getUser() {
+        return user;  // Getter for user
+    }
+
+    public void setUser(User user) {
+        this.user = user;  // Setter for user
+    }
+
+    @Override
+    public String toString() {
+        return "Address{" +
+                "id=" + id +
+                ", street='" + street + '\'' +
+                ", city='" + city + '\'' +
+                ", state='" + state + '\'' +
+                ", pinCode='" + pinCode + '\'' +
+                ", user=" + user.getName() +  // To display the user's name associated with the address
+                '}';
     }
 }

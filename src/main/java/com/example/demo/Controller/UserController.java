@@ -22,9 +22,7 @@ import com.example.demo.Service.UserService;
 @RequestMapping("/user")
 public class UserController {
 
-    private static final String Httpstatus = null;
-	private static final int ResponseEntity = 0;
-	@Autowired
+    @Autowired
     private UserService userService;
 
     @GetMapping("/")

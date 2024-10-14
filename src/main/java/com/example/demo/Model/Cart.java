@@ -1,40 +1,25 @@
 package com.example.demo.Model;
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.util.List;
 
 @Entity
 public class Cart {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    // Many carts can be linked to one user
+    // Establish a proper relationship with User entity
+    @JsonBackReference // This indicates the child side
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    private User user; // Reference to the User entity
 
-    // One cart can have multiple cart items
-    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CartItems> cartItems;
 
-    // Many carts can be linked to one address
-    @ManyToOne
-    @JoinColumn(name = "address_id", nullable = false)
-    private Address address;
-
-    public Cart() {
-        super();
-    }
-
-    public Cart(int id, User user, List<CartItems> cartItems, Address address) {
-        super();
-        this.id = id;
-        this.user = user;
-        this.cartItems = cartItems;
-        this.address = address;
-    }
+    public Cart() {}
 
     // Getters and Setters
     public int getId() {
@@ -61,16 +46,8 @@ public class Cart {
         this.cartItems = cartItems;
     }
 
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
-    }
-
     @Override
     public String toString() {
-        return "Cart {id=" + id + ", user=" + user + ", cartItems=" + cartItems + ", address=" + address + "}";
+        return "Cart [id=" + id + ", user=" + user + ", cartItems=" + cartItems + "]";
     }
 }
