@@ -1,4 +1,4 @@
-package com.example.demo.Model;
+                    package com.example.demo.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -19,6 +19,7 @@ public class CartItems {
 
     // Product details
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "product_id", nullable = false)
     private Product product; // Assuming you have a Product entity
 

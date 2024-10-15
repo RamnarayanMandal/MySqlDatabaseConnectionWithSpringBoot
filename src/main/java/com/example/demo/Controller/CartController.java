@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -51,5 +52,42 @@ public class CartController {
         } catch (Exception e) {
             return new ResponseEntity<>("An error occurred while processing the request: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+    
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> removeCartBYId(@PathVariable int id){
+    	try {
+    		Cart cart = cartService.removeCartById(id);
+    		
+    		if(cart==null) {
+    			return new ResponseEntity<>("Something went wrong while removing the cart",HttpStatus.SERVICE_UNAVAILABLE);
+    			
+    		}
+    		
+    		return new ResponseEntity<>(cart,HttpStatus.OK);
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			return new ResponseEntity<>("An error occurred while removing the cart"+ e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+    }
+    
+    @DeleteMapping("/user/:{userId}")
+    public ResponseEntity<?> removeCartByUserId(@PathVariable int userId){
+    	try {
+    		
+    		List<Cart> carts = cartService.removeCartByUserId(userId);
+    		
+    		if(carts.isEmpty()) {
+    			return new ResponseEntity<>("Something went wrong while removing the cart",HttpStatus.SERVICE_UNAVAILABLE);
+    			
+    		}
+    		
+    		return new ResponseEntity<>(carts,HttpStatus.OK);
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			return new ResponseEntity<>("An error occurred while removing the cart based on userId"+e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+		}
     }
 }
