@@ -1,5 +1,7 @@
 package com.example.demo.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,6 +22,7 @@ public class Address {
     private String pinCode;
 
     // Reference to User
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id")  // This will create a foreign key in the Address table
     private User user;

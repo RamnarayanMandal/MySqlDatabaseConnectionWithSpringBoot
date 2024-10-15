@@ -1,16 +1,17 @@
 package com.example.demo.Model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Product {
-    
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    
     private String name;
     private String description;
     private String price;
@@ -19,12 +20,13 @@ public class Product {
     private String images;
     private String thumbnailImage;
 
-    // Default constructor
-    public Product() {
-        super();
-    }
+    // One product can be in multiple cart items
+    @JsonIgnore
+    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private Set<CartItems> cartItems;
 
-    // Parameterized constructor
+    public Product() {}
+
     public Product(int id, String name, String description, String price, int quantity, String sku, String images, String thumbnailImage) {
         this.id = id;
         this.name = name;
@@ -37,7 +39,6 @@ public class Product {
     }
 
     // Getters and Setters
-
     public int getId() {
         return id;
     }
@@ -100,6 +101,14 @@ public class Product {
 
     public void setThumbnailImage(String thumbnailImage) {
         this.thumbnailImage = thumbnailImage;
+    }
+
+    public Set<CartItems> getCartItems() {
+        return cartItems;
+    }
+
+    public void setCartItems(Set<CartItems> cartItems) {
+        this.cartItems = cartItems;
     }
 
     @Override

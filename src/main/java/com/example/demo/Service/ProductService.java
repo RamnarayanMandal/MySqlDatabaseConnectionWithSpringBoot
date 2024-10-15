@@ -13,15 +13,14 @@ import com.example.demo.Repository.ProductRepo;
 @Service
 public class ProductService {
     
-    private static final Product UpdateById = null;
-	@Autowired
+    @Autowired
     ProductRepo productRepo;
 
     // Save the product and return the updated list of products
-    public List<Product> addProduct(Product product) {
+    public Product addProduct(Product product) {
        
         // Return the list of all products
-        return (List<Product>) productRepo.save(product);
+        return productRepo.save(product);
     }
 
 	public List<Product> getAllProduct() {
