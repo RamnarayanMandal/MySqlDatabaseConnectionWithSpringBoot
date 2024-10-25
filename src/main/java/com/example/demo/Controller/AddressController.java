@@ -44,7 +44,7 @@ public class AddressController {
 	}
 	
 	@GetMapping("/userId/{userId}")
-  public ResponseEntity<?> getAllAddressbyUserId(@PathVariable int userId){
+    public ResponseEntity<?> getAllAddressbyUserId(@PathVariable int userId){
 		try {
 		List<Address> address = addressService.getAddressbyUserId(userId);
 		
